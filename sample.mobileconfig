@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <!-- SoftEther VPNサーバにOpenVPNとしてiPhoneからパスワード認証で自動接続したいなって時に使う。 -->
+    <!-- オンデマンド接続するタイミングは、接続したWiFiで実際にインターネットにアクセスするタイミング。
+    その為、WiFiに接続しただけでは[VPN]のアイコンが出てこず、4Gのままとなることがある。
+    その時はSafariなど他のアプリを開くと自動でWifiとVPNが接続開始される。 -->
+    <key>HasRemovalPasscode</key>
+    <false/>
+    <key>PayloadContent</key>
+    <array>
+      <dict>
+        <key>IPv4</key>
+        <dict>
+          <key>OverridePrimary</key>
+          <integer>1</integer>
+        </dict>
+        <key>PayloadDescription</key>
+        <string>VPN Configurations</string>
+        <key>PayloadDisplayName</key>
+        <string>VPN Configurations</string>
+        <key>PayloadIdentifier</key>
+        <!-- プロファイルを一意に示すドット区切りの文字列。ここが重複するとインポート時に上書きとなるので注意。 -->
+        <string>com.vpn.vpn123456</string>
+        <key>PayloadType</key>
+        <string>com.apple.vpn.managed</string>
+        <key>PayloadUUID</key>
+        <!-- @UUID@ には任意のUUIDを記入する。 -->
+        <string>@UUID@</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>Proxies</key>
+        <dict>
+          <key>HTTPEnable</key>
+          <integer>0</integer>
+          <key>HTTPSEnable</key>
+          <integer>0</integer>
+        </dict>
+        <key>UserDefinedName</key>
+        <string>Autoconnect OpenVPN</string>
+        <key>VPN</key>
+        <dict>
+          <key>AuthName</key>
+          <!-- VendorConfig内で設定するのでDEFAULT固定でよい。 -->
+          <string>DEFAULT</string>
+          <key>AuthenticationMethod</key>
+          <!-- 認証方法は証明書（Certificate）ではなくPasswordとする。 -->
+          <string>Password</string>
+          <key>DisconnectOnIdle</key>
+          <integer>0</integer>
+          <key>ExcludeLocalNetworks</key>
+          <integer>1</integer>
+          <key>IncludeAllNetworks</key>
+          <integer>1</integer>
+          <key>OnDemandEnabled</key>
+          <integer>1</integer>
+          <key>OnDemandRules</key>
+          <array>
+            <dict>
+              <key>InterfaceTypeMatch</key>
+              <string>WiFi</string>
+              <key>SSIDMatch</key>
+              <array>
+                <!-- @SSID@ には自動接続の対象外としたいWiFiのSSIDを記入する。 -->
+                <string>@SSID@</string>
+              </array>
+              <key>Action</key>
+              <string>Disconnect</string>
+            </dict>
+            <dict>
+              <key>InterfaceTypeMatch</key>
+              <string>WiFi</string>
+              <key>Action</key>
+              <string>Connect</string>
+            </dict>
+            <dict>
+              <!-- VPN Default state -->
+              <key>Action</key>
+              <string>Disconnect</string>
+            </dict>
+          </array>
+          <key>RemoteAddress</key>
+          <!-- VendorConfig内で設定するのでDEFAULT固定でよい。 -->
+          <string>DEFAULT</string>
+        </dict>
+        <key>VPNSubType</key>
+        <string>net.openvpn.connect.app</string>
+        <key>VPNType</key>
+        <string>VPN</string>
+        <key>VendorConfig</key>
+        <dict>
+          <!-- 以下、SoftEtherで自動生成された.ovpnファイルの内容を参考に記入する。 -->
+          <!-- key-string はオプション名と設定値にそれぞれ対応し、設定値が不要な場合は"string"は"NOARGS"とする。 -->
+          <key>auth</key>
+          <string>SHA1</string>
+          <key>ca</key>
+          <!-- caタグの内容（証明書）を、改行を"\n"に置換したうえで貼り付ける。 -->
+          <string>例：-----BEGIN CERTIFICATE-----\nAAA\nBBB\nCCC\n-----END CERTIFICATE-----\n</string>
+          <key>cipher</key>
+          <string>AES-128-CBC</string>
+          <key>client</key>
+          <string>NOARGS</string>
+          <key>dev</key>
+          <string>tun</string>
+          <key>remote</key>
+          <!-- 接続先ホスト、ポート番号、プロトコル の順に半角スペースで区切って入力する。 -->
+          <string>例：example.com 443 tcp</string>
+          <key>auth-user-pass</key>
+          <!-- ユーザID、パスワード の順に"\n"で区切って入力する。 -->
+          <string>例：UserID\nPassword</string>
+          <!-- パスワード認証のため、クライアント証明書は不要。 -->
+          <key>client-cert-not-required</key>
+          <string>NOARGS</string>
+          <!-- パスワード認証であってもcertとkeyはNOARGSを設定しないと、"OpenVPN VoD config error: Neither CertificatePayload nor cert/key values configured"とエラーが出る。 -->
+          <key>cert</key>
+          <string>NOARGS</string>
+          <key>key</key>
+          <!-- keyに限り引数は二つ必要。 -->
+          <string>NOARGS NOARGS</string>
+          <!-- vpn-on-demand 0 を追加するとOpenVPNアプリ上ではオンデマンドではなく通常の接続プロファイルとして表示されるようになる。
+          こうしないと、iOSがオンデマンド接続している間にOpenVPNアプリを表示すると何故かアプリの画面が真っ黒となってしまう。 -->
+          <key>vpn-on-demand</key>
+          <string>0</string>
+        </dict>
+      </dict>
+    </array>
+    <key>PayloadDisplayName</key>
+    <string>OpenVPN Configurations</string>
+    <key>PayloadIdentifier</key>
+    <!-- @UUID@ には任意のUUIDを記入する。 -->
+    <string>@UUID@</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <!-- @UUID@ には任意のUUIDを記入する。 -->
+    <string>@UUID@</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+  </dict>
+</plist>
